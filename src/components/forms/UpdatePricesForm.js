@@ -35,13 +35,13 @@ export default function UpdatePricesForm({ open, itemData, handleClose, storeid 
         let q = query(collection(db, "stores", storeid, 'items'), where("category", "==", categoryToUpdate));
 
         if (categoryToUpdate == 'All') {
-            query(collection(db, "stores", storeid, 'items'));
+            q = query(collection(db, "stores", storeid, 'items'));
         }
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((docui) => {
             console.log(docui.data().category)
             const docRef = doc(db, "stores", storeid, 'items', docui.id)
-
+            console.log(docui.data())
             batch.update(docRef, { sellPrice: docui.data().sellPrice * (1 + (amount / 100)) })
         });
         batch.commit()
