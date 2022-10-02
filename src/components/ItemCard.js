@@ -31,6 +31,9 @@ export default function ItemCard({ data, storeid, handleEdit, handleSell }) {
                 <Typography variant="body2" color="text.secondary">
                     {data.category}
                 </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {data.sellPrice}
+                </Typography>
 
             </CardContent>
             <CardActions>

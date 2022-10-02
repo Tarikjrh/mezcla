@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, TextField } from '@mui/material'
-import { collection, query, where, getDocs, writeBatch } from "firebase/firestore";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, MenuItem, TextField } from '@mui/material'
+import { collection, query, where, getDocs, writeBatch, doc } from "firebase/firestore";
 import { db } from '../../firebaseconfig'
 import Loader from '../../helpers/Loader'
 import { categories } from '../../helpers/categories'
@@ -20,39 +20,38 @@ export default function UpdatePricesForm({ open, itemData, handleClose, storeid 
         setShowLoader(true)
 
         getData()
+        setShowLoader(false)
 
+        handleClosePlus()
     }
-    // const batch = db.batch()
-
-    // db.collection('cities').get().then(function (querySnapshot) {
-    //     querySnapshot.forEach(function (doc) {
-    //         const docRef = db.collection('cities').doc(doc.id)
-    //         batch.update(docRef, { capital: true })
-    //     });
-
-    //     batch.commit();
-    // });
 
     async function getData() {
 
+        console.log(categoryToUpdate)
         const batch = writeBatch(db);
 
 
-        const querySnapshot = await getDocs(collection(db, "stores", storeid, 'items'));
-        querySnapshot.forEach((docui) => {
 
+        let q = query(collection(db, "stores", storeid, 'items'), where("category", "==", categoryToUpdate));
+
+        if (categoryToUpdate == 'All') {
+            query(collection(db, "stores", storeid, 'items'));
+        }
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((docui) => {
+            console.log(docui.data().category)
             const docRef = doc(db, "stores", storeid, 'items', docui.id)
 
-            batch.update(docRef, { sellPrice: 10 })
-            console.log(docui.id, " => ", docui.data());
+            batch.update(docRef, { sellPrice: docui.data().sellPrice * (1 + (amount / 100)) })
         });
-        batch.commit();
+        batch.commit()
+        console.log('done')
+
     }
     function handleClosePlus() {
         //reset values
         handleClose()
     }
-
 
 
 
@@ -68,8 +67,8 @@ export default function UpdatePricesForm({ open, itemData, handleClose, storeid 
                     <form onSubmit={handleSubmit}>
                         <TextField
                             margin="dense"
-                            id="quantity"
-                            label="Quantity"
+                            id="Category"
+                            label="Category"
                             type="number"
                             fullWidth
                             value={categoryToUpdate}
@@ -88,8 +87,8 @@ export default function UpdatePricesForm({ open, itemData, handleClose, storeid 
                         </TextField>
                         <TextField
                             margin="dense"
-                            id="quantity"
-                            label="Quantity"
+                            id="percent"
+                            label="Porcentagem"
                             type="number"
                             fullWidth
                             value={amount}
