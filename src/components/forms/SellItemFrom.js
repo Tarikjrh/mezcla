@@ -30,7 +30,7 @@ export default function SellItemFrom({ open, itemData, handleClose }) {
         });
 
         // Update Item Qunatity 
-        const storeRef = doc(db, "stores", itemData.data.originStore, 'items', itemData.id);
+        const storeRef = doc(db, "items", itemData.id);
         batch.update(storeRef, { quantityRemaining: increment((-sellCount)) })
 
 

@@ -12,6 +12,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { Fragment, useEffect, useState } from 'react';
 import LogInPage from './pages/LogInPage';
 import Vendas from './pages/Vendas';
+import DrawerComp from './components/DrawerComp';
+import Items from './pages/Items';
 
 function App() {
 
@@ -22,36 +24,49 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
         setUser(user)
         // ...
       } else {
         // User is signed out
-        // ...
         setUser('')
       }
     });
-    return () => {
-
-    };
   }, []);
 
   return (
-    <div className="App">
-      <Routes>
+    <div className="App" >
+      <DrawerComp >
 
-        <Fragment>
+        {
+          user && <Routes>
 
-          <Route path="/" element={<Stores />} />
-          <Route path="/login" element={<LogInPage />} />
-          <Route path="/vendas" element={<Vendas />} />
-          <Route path="/storedetails/:storeid" element={<StoreDetails />} />
-        </Fragment>
+            <Fragment>
+
+              <Route path="/" element={<Stores />} />
+              <Route path="/login" element={<LogInPage />} />
+              <Route path="/vendas" element={<Vendas />} />
+              <Route path="/items" element={<Items />} />
+              <Route path="/storedetails/:storeid" element={<StoreDetails />} />
+            </Fragment>
 
 
-      </Routes>
+          </Routes>
+        }
+        {
+          !user && <Routes>
 
+            <Fragment>
+
+              <Route path="/" element={<LogInPage />} />
+
+            </Fragment>
+
+
+          </Routes>
+        }
+
+      </DrawerComp>
     </div>
   );
 }

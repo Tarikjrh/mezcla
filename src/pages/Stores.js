@@ -37,7 +37,6 @@ export default function Stores() {
 
     return (
         <Box sx={{ m: 5 }}>
-            <div>Stores</div>
             <Button onClick={handleClickOpen}>Add Store</Button>
             <StoreForm open={open.open} handleClose={handleClose} editData={open.editData} formMode={open.mode} />
             <Grid container spacing={(6)}>

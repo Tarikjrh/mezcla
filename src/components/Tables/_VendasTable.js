@@ -17,7 +17,7 @@ export default function VendasTable({ tableData }) {
     }
 
     return (
-        <Card sx={{ m: 6 }}>
+        <Card>
             <TableContainer>
                 <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
                     <TableHead>
@@ -41,8 +41,8 @@ export default function VendasTable({ tableData }) {
                                 </TableCell>
                                 <TableCell>{row.data.category}</TableCell>
                                 <TableCell>{row.data.date.toDate().toDateString()}</TableCell>
-                                <TableCell> $ {row.data.sellPrice}</TableCell>
-                                <TableCell> $ {row.data.buyPrice - row.data.sellPrice}</TableCell>
+                                <TableCell>{row.data.sellPrice}</TableCell>
+                                <TableCell>{row.data.buyPrice - row.data.sellPrice}</TableCell>
                                 <TableCell>
                                     <Chip
                                         label={row.soldCount}

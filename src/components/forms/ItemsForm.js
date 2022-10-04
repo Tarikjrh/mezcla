@@ -43,7 +43,7 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
 
         setShowLoader(true)
         if (formMode == 'add') {
-            const storeRef = addDoc(collection(db, "stores", storeid, 'items',), {
+            const storeRef = addDoc(collection(db, 'items'), {
                 name: name,
                 code: code,
                 category: category,
@@ -51,7 +51,7 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
                 sellPrice: parseInt(sellPrice),
                 totalQuantity: parseInt(totalQuantity),
                 date: date ? Timestamp.fromDate(new Date(date)) : '',
-                quantityRemaining: totalQuantity,
+                quantityRemaining: parseInt(totalQuantity),
                 originStore: storeid
             }).then(e => {
                 setShowLoader(false)
@@ -61,7 +61,7 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
             })
         }
         else if (formMode == 'edit') {
-            const storeRef = doc(db, "stores", storeid, 'items', editData.id);
+            const storeRef = doc(db, "items", editData.id);
             // Set the "capital" field of the city 'DC'
             updateDoc(storeRef, {
                 name: name,
@@ -72,7 +72,6 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
                 // totalQuantity: totalQuantity,
                 date: Timestamp.fromDate(new Date(date)),
                 quantityRemaining: parseInt(totalQuantity),
-                originStore: storeid
             }).then(e => {
                 setShowLoader(false)
 
@@ -93,6 +92,10 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
         setDate(new Date())
     }
 
+    function handleCategorySelect(e) {
+        setCategory(e);
+        setCode(e.substring(0, 3) + parseInt(Math.random() * (10000 - 1) + 1))
+    }
 
     return (
         <Fragment>
@@ -113,6 +116,24 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
                             onChange={(e) => { setName(e.target.value) }}
                             variant="standard"
                         />
+
+                        <TextField
+
+                            margin="dense"
+                            id="Category"
+                            label="Category"
+                            fullWidth
+                            select
+                            value={category}
+                            onChange={(e) => { handleCategorySelect(e.target.value) }}
+                            variant="standard"
+                        >
+                            {categories.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                         <TextField
 
                             margin="dense"
@@ -124,23 +145,6 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
                             onChange={(e) => { setCode(e.target.value) }}
                             variant="standard"
                         />
-                        <TextField
-
-                            margin="dense"
-                            id="Category"
-                            label="Category"
-                            fullWidth
-                            select
-                            value={category}
-                            onChange={(e) => { setCategory(e.target.value) }}
-                            variant="standard"
-                        >
-                            {categories.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
                         <TextField
 
                             margin="dense"
@@ -175,7 +179,7 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
                             margin="dense"
                             id="quantity"
                             label=" Quantity"
-                            type="text"
+                            type="number"
                             fullWidth
                             value={totalQuantity}
                             onChange={(e) => { setTotalQuantity(e.target.value) }}
