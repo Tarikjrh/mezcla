@@ -64,8 +64,8 @@ export default function StoreDetails() {
 
             <Grid container spacing={(6)}>
                 {storeDetails.map(item => {
-                    return <Grid item key={item.id} xs={12} sm={6}>
-                        <ItemCard data={item.data} storeid={item.id} handleEdit={() => { handleEdit(item) }} handleSell={() => { handleSell(item) }} />
+                    return <Grid item key={item.id} xs={12} sm={6} md={6}>
+                        <ItemCard data={item.data} itemid={item.id} handleEdit={() => { handleEdit(item) }} handleSell={() => { handleSell(item) }} />
                     </Grid>
                 })}
             </Grid>

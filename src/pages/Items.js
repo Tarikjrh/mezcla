@@ -1,7 +1,7 @@
 import { Button, Grid, Box } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import StoreForm from '../components/forms/StoreForm';
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, doc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebaseconfig';
 import StoreCard from '../components/StoreCard';
 import ItemCard from '../components/ItemCard';
@@ -37,6 +37,7 @@ export default function Items() {
     const handleEdit = (e) => {
         setOpen({ open: true, editData: e, mode: 'edit' })
     }
+
     const handleSell = (e) => {
         setOpenSellForm({ open: true, itemData: e, })
     }
@@ -48,10 +49,10 @@ export default function Items() {
         <Box sx={{ m: 5 }}>
             <ItemsForm open={open.open} handleClose={handleClose} storeid={open.editData.originStore} editData={open.editData} formMode={open.mode} />
             <SellItemFrom open={openSellForm.open} itemData={openSellForm.itemData ? openSellForm.itemData : ''} handleClose={handleCloseSellFrom} />
-            <Grid container spacing={(6)}>
+            <Grid container spacing={(6)} mt={{ md: 3 }}>
                 {storeDetails.map(item => {
                     return <Grid item key={item.id} xs={12} sm={4}>
-                        <ItemCard data={item.data} storeid={item.id} handleEdit={() => { handleEdit(item) }} handleSell={() => { handleSell(item) }} />
+                        <ItemCard data={item.data} itemid={item.id} handleEdit={() => { handleEdit(item) }} handleSell={() => { handleSell(item) }} />
                     </Grid>
                 })}
             </Grid>

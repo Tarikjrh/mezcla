@@ -24,6 +24,24 @@ const categories = [
         label: 'Cadeiras'
     },
     {
+        value: 'Plantas',
+        label: 'Plantas'
+    },
+    {
+        value: 'Bamdeijas',
+        label: 'Bamdeijas'
+    },
+    {
+        value: 'Louça',
+        label: 'Louça'
+    },
+    {
+        value: 'Almofadas',
+        label: 'Almofadas'
+    },
+
+
+    {
         value: 'Outros',
         label: 'Outros'
     },

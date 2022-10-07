@@ -14,8 +14,19 @@ export default function Vendas() {
         const unsubscribe = onSnapshot(q, orderBy("date", "desc"), (querySnapshot) => {
             const vendasArray = [];
             querySnapshot.forEach((doc) => {
-                vendasArray.push({ data: doc.data(), id: doc.id });
+                // console.log(doc.data().data.name)
+                let short = doc.data().data
+                vendasArray.push({
+                    name: short.name, category: short.category, date: doc.data().date, buyPrice: short.buyPrice,
+                    newPrice: short.buyPrice,
+                    originalStore: short.originalStore,
+                    soldCount: doc.data().soldCount,
+                    productId: doc.data().productId,
+                    quantityRemaining: short.quantityRemaining
+
+                });
             });
+            console.log(vendasArray)
             setVendas(vendasArray)
         });
         return () => {
@@ -26,7 +37,7 @@ export default function Vendas() {
 
     return (
         <Grid container >
-            <Grid item xs={12}>
+            <Grid item xs={12} mt={{ sm: 10 }}>
                 {vendas.length > 0 && <DataTable tableData={vendas} />}
                 {/* {vendas.length > 0 && <VendasTable tableData={vendas} />} */}
                 {vendas.length == 0 && <h1>no sales</h1>}

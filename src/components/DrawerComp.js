@@ -20,7 +20,14 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ChairIcon from '@mui/icons-material/Chair';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+
 import { useLocation, useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebaseconfig';
 
 const drawerWidth = 240;
 
@@ -83,6 +90,13 @@ export default function DrawerComp(props) {
         setOpen(false);
     };
 
+    function handleLogout() {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+        }).catch((error) => {
+            // An error happened.
+        });
+    }
 
 
     let nav = [{
@@ -92,13 +106,25 @@ export default function DrawerComp(props) {
     }, {
         label: 'Items',
         path: 'items',
-        icon: <AttachMoneyIcon />
+        icon: <ChairIcon />
 
-    }, {
+    },
+    {
         label: 'Vendas',
         path: 'vendas',
         icon: <AttachMoneyIcon />
-    }]
+    },
+    {
+        label: 'Compras',
+        path: 'compras',
+        icon: <ShoppingCartOutlinedIcon />
+    },
+    {
+        label: 'Resumo',
+        path: 'fatura',
+        icon: <ReceiptIcon />
+    }
+    ]
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -115,7 +141,7 @@ export default function DrawerComp(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div" >
-                        Store
+                        Mezcla
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -149,13 +175,22 @@ export default function DrawerComp(props) {
                             </ListItemButton>
                         </ListItem>
                     ))}
+                    <ListItem disablePadding sx={{ float: 'right' }}>
+                        <ListItemButton onClick={handleLogout} >
+                            <ListItemIcon>
+                                <LogoutIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'log out'} />
+                        </ListItemButton>
+                    </ListItem>
                 </List>
 
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
+
                 {props.children}
             </Main>
-        </Box>
+        </Box >
     );
 }

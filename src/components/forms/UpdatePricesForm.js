@@ -27,24 +27,45 @@ export default function UpdatePricesForm({ open, itemData, handleClose, storeid 
 
     async function getData() {
 
+        // console.log(categoryToUpdate)
+        // const batch = writeBatch(db);
+
+
+
+        // let q = query(collection(db, "stores", storeid, 'items'), where("category", "==", categoryToUpdate));
+
+        // if (categoryToUpdate == 'All') {
+        //     q = query(collection(db, "stores", storeid, 'items'));
+        // }
+        // const querySnapshot = await getDocs(q);
+        // querySnapshot.forEach((docui) => {
+        //     console.log(docui.data().category)
+        //     const docRef = doc(db, "stores", storeid, 'items', docui.id)
+        //     console.log(docui.data())
+        //     batch.update(docRef, { newPrice: docui.data().newPrice * (1 + (amount / 100)) })
+        // });
+        // batch.commit()
+
         console.log(categoryToUpdate)
         const batch = writeBatch(db);
 
 
 
-        let q = query(collection(db, "stores", storeid, 'items'), where("category", "==", categoryToUpdate));
+        let q = query(collection(db, 'items'), where("category", "==", categoryToUpdate), where('originStore', '==', storeid));
 
         if (categoryToUpdate == 'All') {
-            q = query(collection(db, "stores", storeid, 'items'));
+            q = query(collection(db, 'items'), where('originStore', '==', storeid));
         }
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((docui) => {
-            console.log(docui.data().category)
-            const docRef = doc(db, "stores", storeid, 'items', docui.id)
             console.log(docui.data())
+            const docRef = doc(db, 'items', docui.id)
             batch.update(docRef, { sellPrice: docui.data().sellPrice * (1 + (amount / 100)) })
         });
         batch.commit()
+
+
+
         console.log('done')
 
     }

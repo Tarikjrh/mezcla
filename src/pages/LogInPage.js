@@ -31,10 +31,10 @@ export default function LogInPage() {
 
 
     return (
-        <Box sx={{ '& > :not(style)': { m: 1 } }}>
+        <Box sx={{ '& > :not(style)': { m: 1 }, display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center', }} mt={{ xs: 10 }}>
             <TextField
                 id="input-with-icon-textfield"
-                label="TextField"
+                label="Email"
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -49,7 +49,7 @@ export default function LogInPage() {
             />
             <TextField
                 id="input-with-icon-textfield"
-                label="TextField"
+                label="Password"
                 variant="standard"
                 value={password}
                 onChange={(e) => { setPassword(e.target.value) }}

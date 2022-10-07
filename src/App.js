@@ -5,7 +5,8 @@ import StoreDetails from './pages/StoreDetails';
 import {
   Routes,
   Route,
-  Redirect
+  Redirect,
+  Navigate
 } from "react-router-dom";
 import { auth } from './firebaseconfig';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -14,6 +15,8 @@ import LogInPage from './pages/LogInPage';
 import Vendas from './pages/Vendas';
 import DrawerComp from './components/DrawerComp';
 import Items from './pages/Items';
+import Fatura from './pages/Fatura';
+import Compras from './pages/Compras';
 
 function App() {
 
@@ -36,10 +39,11 @@ function App() {
 
   return (
     <div className="App" >
-      <DrawerComp >
 
-        {
-          user && <Routes>
+      {
+        user !== '' &&
+        <DrawerComp >
+          <Routes>
 
             <Fragment>
 
@@ -47,26 +51,32 @@ function App() {
               <Route path="/login" element={<LogInPage />} />
               <Route path="/vendas" element={<Vendas />} />
               <Route path="/items" element={<Items />} />
+              <Route path="/compras" element={<Compras />} />
+              <Route path="/fatura" element={<Fatura />} />
               <Route path="/storedetails/:storeid" element={<StoreDetails />} />
             </Fragment>
 
 
           </Routes>
-        }
-        {
-          !user && <Routes>
-
-            <Fragment>
-
-              <Route path="/" element={<LogInPage />} />
-
-            </Fragment>
+        </DrawerComp>
+      }
 
 
-          </Routes>
-        }
+      {
+        user == '' && <Routes>
 
-      </DrawerComp>
+          <Fragment>
+
+            <Route path="/" element={<LogInPage />} />
+            <Route
+              path="*"
+              element={<Navigate replace to='/' />} />
+          </Fragment>
+
+
+        </Routes>
+      }
+
     </div>
   );
 }

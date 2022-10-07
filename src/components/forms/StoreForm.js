@@ -3,9 +3,12 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { db } from '../../firebaseconfig'
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import Loader from '../../helpers/Loader';
+import DisplayAlert from '../../helpers/DisplayAlert';
 
 export default function StoreForm({ open, handleClose, editData, formMode }) {
     const [showLoader, setShowLoader] = useState(false);
+    const [showAlert, setShowAlert] = useState({ open: false, message: '', severity: '' })
+
 
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
@@ -36,7 +39,8 @@ export default function StoreForm({ open, handleClose, editData, formMode }) {
                 contact: contact
             }).then(e => {
                 setShowLoader(false)
-
+                setShowAlert({ open: true, message: 'Loja Adicionada Com Sucesso', severity: 'success' })
+                handleClosePlus()
                 console.log('data added')
                 handleClose()
             })
@@ -50,20 +54,40 @@ export default function StoreForm({ open, handleClose, editData, formMode }) {
                 address: address,
                 phone: phone,
                 contact: contact
-            }).then(e => {
+            }).then(x => {
                 setShowLoader(false)
-
+                setShowAlert({ open: true, message: 'Loja Editada Com Sucesso', severity: 'success' })
+                handleClosePlus()
                 console.log('data updated')
-                handleClose()
+            }).catch(e => {
+                setShowAlert({ open: true, message: e, severity: 'error' })
+                handleClosePlus()
             })
         }
 
     }
 
+    function resetForm() {
+        setName('')
+        setAddress('')
+        setPhone('')
+        setContact('')
+    }
 
+    function handleClosePlus() {
+        handleClose()
+        resetForm();
+
+        setTimeout(() => {
+            setShowAlert({ open: false, message: '', severity: '' })
+
+        }, 3000);
+    }
 
     return (
         <Fragment>
+            <DisplayAlert alert={showAlert} />
+
             {showLoader && <Loader />}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Adicionar Loja</DialogTitle>
