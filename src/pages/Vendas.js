@@ -17,7 +17,11 @@ export default function Vendas() {
                 // console.log(doc.data().data.name)
                 let short = doc.data().data
                 vendasArray.push({
-                    name: short.name, category: short.category, date: doc.data().date, buyPrice: short.buyPrice,
+                    name: short.name,
+                    category: short.category,
+                    date: doc.data().date,
+                    buyPrice: short.buyPrice,
+                    sellPrice: short.sellPrice,
                     newPrice: short.buyPrice,
                     originalStore: short.originalStore,
                     soldCount: doc.data().soldCount,

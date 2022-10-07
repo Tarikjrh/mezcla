@@ -51,53 +51,54 @@ export default function ItemCard({ data, itemid, handleEdit, handleSell, handleD
 
 
     return (
-        <Badge color="primary" badgeContent={data.quantityRemaining} sx={{ width: '100%', height: '100%' }}>
-            <ConfirmDelete open={showDeleteDialog} handleClose={() => { setShowDeleteDialog(false) }} confirmDelete={handleDelete} />
-            <DisplayAlert alert={showAlert} />
+        <Box sx={{ width: '100%', height: '100%', }} ml={1}>
+            <Badge color="primary" badgeContent={data.quantityRemaining} sx={{ width: '95%', height: '100%', "& .MuiBadge-badge": { fontSize: 15, height: 20, width: 20 } }}>
+                <ConfirmDelete open={showDeleteDialog} handleClose={() => { setShowDeleteDialog(false) }} confirmDelete={handleDelete} />
+                <DisplayAlert alert={showAlert} />
+                <Card sx={{ width: '100%', height: '100%', justifyContent: 'space-between', display: 'flex', flexDirection: 'column', boxShadow: '0px 2px 10px 0px rgba(58, 53, 65, 0.1)', color: '#3a3541de', fontFamily: 'Inter', fontWeight: '500' }}>
 
-            <Card sx={{ width: '100%', height: '100%', justifyContent: 'space-between', display: 'flex', flexDirection: 'column' }}>
-                <Grid container justifyContent={'space-between'} px={{ xs: 0 }}>
-                    <Grid item xs={8} >
-                        <CardContent>
-                            <Typography gutterBottom variant="h4" component="div" sx={{ mb: 0 }}>
-
-                                {data.name}
-
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                {data.category}
-                            </Typography>
+                    <Grid container justifyContent={'space-between'} >
+                        <Grid item xs={8} >
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="div" sx={{ mb: 0 }}>
+                                    {data.name}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                    {data.category}
+                                </Typography>
 
 
-                            <Typography variant="h2" color="text.secondary" >
-                                $ {data.sellPrice.toFixed(2)}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" >
-                                Custo: $ {data.newPrice.toFixed(2)}
-                            </Typography>
-
+                                <Typography variant="h4" color="secondary" >
+                                    $ {data.sellPrice.toFixed(2)}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" >
+                                    Custo: $ {data.newPrice.toFixed(2)}
+                                </Typography>
 
 
 
-                        </CardContent>
+
+                            </CardContent>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <DotMenu handleAction={(e) => { handleAction(e) }} />
+
+                            {data.image && <CardMedia
+                                component="img"
+                                height="140"
+                                image={data.image ? data.image : ''}
+                                // image={data.image ? data.image : pathname == '/items' ? `imgs /${data.category}.jpg` : `../../imgs/${data.category}.jpg`}
+                                alt={data.name}
+                            />}
+                        </Grid>
+
                     </Grid>
-                    <Grid item xs={4}>
-                        <DotMenu handleAction={(e) => { handleAction(e) }} />
+                    <CardActions>
+                        <Button variant="outlined" size="small" color={'secondary'} onClick={handleSell} fullWidth>Vender</Button>
+                    </CardActions>
 
-                        <CardMedia
-                            component="img"
-                            height="140"
-                            image={data.image ? data.image : pathname == '/items' ? `imgs/${data.category}.jpg` : `../../imgs/${data.category}.jpg`}
-                            alt={data.name}
-                        />
-                    </Grid>
-
-                </Grid>
-                <CardActions>
-                    <Button variant="outlined" size="small" onClick={handleSell} fullWidth>Vender</Button>
-                </CardActions>
-
-            </Card>
-        </Badge>
+                </Card>
+            </Badge>
+        </ Box>
     )
 }

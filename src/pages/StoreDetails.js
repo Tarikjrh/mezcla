@@ -7,6 +7,9 @@ import ItemsForm from '../components/forms/ItemsForm';
 import ItemCard from '../components/ItemCard';
 import SellItemFrom from '../components/forms/SellItemFrom';
 import UpdatePricesForm from '../components/forms/UpdatePricesForm';
+import DisplayItems from '../components/DisplayItems';
+import AddIcon from '@mui/icons-material/Add';
+import PercentIcon from '@mui/icons-material/Percent';
 
 export default function StoreDetails() {
     const [storeDetails, setStoreDetails] = useState([])
@@ -53,22 +56,27 @@ export default function StoreDetails() {
 
 
     return (
-        <Box sx={{ m: 5 }}>
+        <Box >
 
-            <Button onClick={handleClickOpen}>Add Items</Button>
-            <Button onClick={handleUpdatePrices}>Update Prices</Button>
+            <Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }} mb={2} spacing={2} >
+                <Grid item>
+                    <Button onClick={handleClickOpen} color={'secondary'} variant={'contained'}><AddIcon /> Add Items</Button>
 
+                </Grid>
+                <Grid item>
+                    <Button onClick={handleUpdatePrices} color={'secondary'} variant={'contained'}><PercentIcon /> Update Prices</Button>
+
+                </Grid>
+
+
+            </Grid>
             <ItemsForm open={open.open} handleClose={handleClose} storeid={storeid} editData={open.editData} formMode={open.mode} />
             <SellItemFrom open={openSellForm.open} itemData={openSellForm.itemData ? openSellForm.itemData : ''} handleClose={handleCloseSellFrom} />
             <UpdatePricesForm open={updatePricesForm.open} itemData={updatePricesForm.itemData ? updatePricesForm.itemData : ''} handleClose={handleCloseUpdatePrices} storeid={storeid} />
 
-            <Grid container spacing={(6)}>
-                {storeDetails.map(item => {
-                    return <Grid item key={item.id} xs={12} sm={6} md={6}>
-                        <ItemCard data={item.data} itemid={item.id} handleEdit={() => { handleEdit(item) }} handleSell={() => { handleSell(item) }} />
-                    </Grid>
-                })}
-            </Grid>
+
+            <DisplayItems storeDetails={storeDetails} handleEdit={handleEdit} handleSell={handleSell} />
+
 
         </Box>
     )

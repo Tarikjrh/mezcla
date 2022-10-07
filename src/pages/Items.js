@@ -7,6 +7,7 @@ import StoreCard from '../components/StoreCard';
 import ItemCard from '../components/ItemCard';
 import ItemsForm from '../components/forms/ItemsForm';
 import SellItemFrom from '../components/forms/SellItemFrom';
+import DisplayItems from '../components/DisplayItems';
 
 export default function Items() {
     const [storeDetails, setStoreDetails] = useState([])
@@ -49,13 +50,17 @@ export default function Items() {
         <Box sx={{ m: 5 }}>
             <ItemsForm open={open.open} handleClose={handleClose} storeid={open.editData.originStore} editData={open.editData} formMode={open.mode} />
             <SellItemFrom open={openSellForm.open} itemData={openSellForm.itemData ? openSellForm.itemData : ''} handleClose={handleCloseSellFrom} />
-            <Grid container spacing={(6)} mt={{ md: 3 }}>
+
+
+            <DisplayItems storeDetails={storeDetails} handleEdit={handleEdit} handleSell={handleSell} />
+
+            {/* <Grid container spacing={(6)} mt={{ md: 3 }}>
                 {storeDetails.map(item => {
                     return <Grid item key={item.id} xs={12} sm={4}>
                         <ItemCard data={item.data} itemid={item.id} handleEdit={() => { handleEdit(item) }} handleSell={() => { handleSell(item) }} />
                     </Grid>
                 })}
-            </Grid>
+            </Grid> */}
         </Box>
     )
 }

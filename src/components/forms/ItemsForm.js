@@ -37,6 +37,7 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
             setSellPrice((editData.data.sellPrice ? editData.data.sellPrice : ''))
             setTotalQuantity((editData.data.quantityRemaining ? editData.data.quantityRemaining : ''))
             setDate((editData.data.date ? formatDate(new Date(editData.data.date.toDate())) : ''))
+            console.log('ìmgi', image)
 
 
         }
@@ -154,26 +155,142 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
 
         }
         else if (formMode === 'edit') {
-            const storeRef = doc(db, "items", editData.id);
-            // Set the "capital" field of the city 'DC'
-            updateDoc(storeRef, {
-                name: name,
-                code: code,
-                category: category,
-                buyPrice: parseInt(buyPrice),
-                sellPrice: parseInt(sellPrice),
-                // totalQuantity: totalQuantity,
-                buyDiscount: parseInt(buyDiscount),
-                newPrice: buyPrice * (1 - (buyDiscount / 100)),
-                date: Timestamp.fromDate(new Date(date)),
-                quantityRemaining: parseInt(totalQuantity),
-            }).then(e => {
-                setShowLoader(false)
-                setShowAlert({ open: true, message: 'Item Adicionado Com Sucesso', severity: 'success' })
 
-                console.log('data updated')
-                handleClosePlus()
-            })
+            const storeRef = doc(db, "items", editData.id);
+
+
+            if (image === '') {
+
+                updateDoc(storeRef, {
+                    name: name,
+                    code: code,
+                    category: category,
+                    buyPrice: parseInt(buyPrice),
+                    sellPrice: parseInt(sellPrice),
+                    // totalQuantity: totalQuantity,
+                    buyDiscount: parseInt(buyDiscount),
+                    newPrice: buyPrice * (1 - (buyDiscount / 100)),
+                    date: Timestamp.fromDate(new Date(date)),
+                    quantityRemaining: parseInt(totalQuantity),
+                }).then(e => {
+                    setShowLoader(false)
+                    setShowAlert({ open: true, message: 'Item Adicionado Com Sucesso', severity: 'success' })
+
+                    console.log('data updated')
+                    handleClosePlus()
+                })
+            }
+
+            else {
+                // upload Image 
+                setShowImageLoader(true)
+                const storageRef = ref(storage, 'products/' + image.name);
+                const metadata = {
+                    contentType: image.type
+                };
+
+
+                const uploadTask = uploadBytesResumable(storageRef, image, metadata);
+                // Listen for state changes, errors, and completion of the upload.
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        setProgressAmount(progress)
+                        switch (snapshot.state) {
+                            case 'paused':
+                                console.log('Upload is paused');
+                                break;
+                            case 'running':
+                                console.log('Upload is running');
+                                break;
+                        }
+                    },
+                    (error) => {
+                        // A full list of error codes is available at
+                        // https://firebase.google.com/docs/storage/web/handle-errors
+                        switch (error.code) {
+                            case 'storage/unauthorized':
+                                // User doesn't have permission to access the object
+                                break;
+                            case 'storage/canceled':
+                                // User canceled the upload
+                                break;
+
+
+                            case 'storage/unknown':
+                                // Unknown error occurred, inspect error.serverResponse
+                                break;
+                        }
+                    },
+                    () => {
+                        // Upload completed successfully, now we can get the download URL
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            console.log('File available at', downloadURL);
+                            setShowImageLoader(false)
+                            updateDoc(storeRef, {
+                                name: name,
+                                code: code,
+                                category: category,
+                                buyPrice: parseInt(buyPrice),
+                                sellPrice: parseInt(sellPrice),
+                                // totalQuantity: totalQuantity,
+                                buyDiscount: parseInt(buyDiscount),
+                                newPrice: buyPrice * (1 - (buyDiscount / 100)),
+                                date: Timestamp.fromDate(new Date(date)),
+                                quantityRemaining: parseInt(totalQuantity),
+                                image: downloadURL
+
+                            }).then(e => {
+                                setShowLoader(false)
+                                setShowAlert({ open: true, message: 'Item Adicionado Com Sucesso', severity: 'success' })
+
+                                console.log('data updated')
+                                handleClosePlus()
+                            })
+
+
+
+
+                        });
+                    }
+                );
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // const storeRef = doc(db, "items", editData.id);
+
+            // updateDoc(storeRef, {
+            //     name: name,
+            //     code: code,
+            //     category: category,
+            //     buyPrice: parseInt(buyPrice),
+            //     sellPrice: parseInt(sellPrice),
+            //     // totalQuantity: totalQuantity,
+            //     buyDiscount: parseInt(buyDiscount),
+            //     newPrice: buyPrice * (1 - (buyDiscount / 100)),
+            //     date: Timestamp.fromDate(new Date(date)),
+            //     quantityRemaining: parseInt(totalQuantity),
+            // }).then(e => {
+            //     setShowLoader(false)
+            //     setShowAlert({ open: true, message: 'Item Adicionado Com Sucesso', severity: 'success' })
+
+            //     console.log('data updated')
+            //     handleClosePlus()
+            // })
         }
 
     }
@@ -270,7 +387,7 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
                                     margin="dense"
                                     id="buyprice"
                                     label=" Buy Price"
-                                    type="tel"
+                                    type="text"
                                     fullWidth
                                     value={buyPrice}
                                     helperText={< NumberFormat thousandSeparator={true} prefix={'Discounted Price:     $ '} value={buyPrice * (1 - (buyDiscount / 100))} displayType={'text'} />}
@@ -287,7 +404,7 @@ export default function ItemsForm({ open, handleClose, storeid, editData, formMo
                                     margin="dense"
                                     id="buyprice"
                                     label="Discount"
-                                    type="tel"
+                                    type="text"
                                     fullWidth
                                     value={buyDiscount}
                                     onChange={(e) => { setBuyDiscount(e.target.value) }}

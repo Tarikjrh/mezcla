@@ -15,10 +15,7 @@ const categories = [
         value: 'Toalhas',
         label: 'Toalhas'
     },
-    {
-        value: 'Redes',
-        label: 'Redes'
-    },
+
     {
         value: 'Cadeiras',
         label: 'Cadeiras'
@@ -28,8 +25,8 @@ const categories = [
         label: 'Plantas'
     },
     {
-        value: 'Bamdeijas',
-        label: 'Bamdeijas'
+        value: 'Bandeijas',
+        label: 'Bandeijas'
     },
     {
         value: 'Louça',
@@ -38,6 +35,14 @@ const categories = [
     {
         value: 'Almofadas',
         label: 'Almofadas'
+    },
+    {
+        value: 'Enfeites',
+        label: 'Enfeites'
+    },
+    {
+        value: 'Enfeites',
+        label: 'Enfeites'
     },
 
 

@@ -37,14 +37,14 @@ export default function Stores() {
     }, [])
 
     return (
-        <Box m={{ xs: 1, sm: 2, md: 5 }}>
+        <Box >
             <Box style={{ display: 'flex', justifyContent: 'flex-end' }} py={{ xs: 2 }} mt={{ xs: 3 }}>
-                <Button onClick={handleClickOpen} variant='contained' ><AddIcon />Adicionar Loja</Button>
+                <Button onClick={handleClickOpen} variant='contained' color={'secondary'} ><AddIcon />Adicionar Loja</Button>
             </Box>
             <StoreForm open={open.open} handleClose={handleClose} editData={open.editData} formMode={open.mode} />
-            <Grid container spacing={(6)}>
+            <Grid container spacing={(2)} justifyContent={{ md: "flex-start", xs: "center" }} >
                 {stores.map(store => {
-                    return <Grid item key={store.id}>
+                    return <Grid item key={store.id} xs={12} sm={6} lg={4}>
                         <StoreCard data={store.data} storeid={store.id} handleEdit={() => { handleEdit(store) }} />
                     </Grid>
                 })}

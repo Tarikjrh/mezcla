@@ -18,12 +18,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
+import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import ChairIcon from '@mui/icons-material/Chair';
+import ChairOutlinedIcon from '@mui/icons-material/ChairOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import ReceiptIcon from '@mui/icons-material/Receipt';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -34,7 +35,8 @@ const drawerWidth = 240;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         flexGrow: 1,
-        padding: theme.spacing(3),
+        height: '100%',
+        // padding: theme.spacing(3) 0 0 theme.spacing(3),
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -53,11 +55,13 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
+    boxShadow: 'none',
     transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
     ...(open && {
+        boxShadow: 'none',
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: `${drawerWidth}px`,
         transition: theme.transitions.create(['margin', 'width'], {
@@ -74,6 +78,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+
 }));
 
 export default function DrawerComp(props) {
@@ -102,11 +107,11 @@ export default function DrawerComp(props) {
     let nav = [{
         label: 'Lojas',
         path: '/',
-        icon: <StoreMallDirectoryIcon />
+        icon: <StoreOutlinedIcon />
     }, {
         label: 'Items',
         path: 'items',
-        icon: <ChairIcon />
+        icon: <ChairOutlinedIcon />
 
     },
     {
@@ -122,15 +127,15 @@ export default function DrawerComp(props) {
     {
         label: 'Resumo',
         path: 'fatura',
-        icon: <ReceiptIcon />
+        icon: <ReceiptOutlinedIcon />
     }
     ]
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', backgroundColor: '#F4F5FA', }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
-                <Toolbar sx={{ backgroundColor: 'primary', }}>
+                <Toolbar sx={{ backgroundColor: '#F4F5FA', boxShadow: 'none', justifyContent: 'space-between' }}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -138,10 +143,12 @@ export default function DrawerComp(props) {
                         edge="start"
                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
-                        <MenuIcon />
+                        <MenuIcon style={{ color: "black" }} />
                     </IconButton>
+
+                    <AccountCircleIcon style={{ color: "black" }} />
                     <Typography variant="h6" noWrap component="div" >
-                        Mezcla
+                        {/* Mezcla */}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -158,13 +165,14 @@ export default function DrawerComp(props) {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>
+                <DrawerHeader sx={{ backgroundColor: '#F4F5FA', }}>
+                    <image src='Header.png' style={{ height: '100%', width: '100%' }} />
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
-                <Divider />
-                <List>
+                {/* <Divider /> */}
+                <List sx={{ backgroundColor: '#F4F5FA', height: '100%' }}>
                     {nav.map((e, index) => (
                         <ListItem key={e.label} disablePadding >
                             <ListItemButton onClick={() => { navigate(e.path) }} sx={{ backgroundColor: pathname.split('/')[1] == e.path ? 'rgba(25, 118, 210, 0.08)' : 'transparent' }}>
@@ -186,10 +194,13 @@ export default function DrawerComp(props) {
                 </List>
 
             </Drawer>
-            <Main open={open}>
-                <DrawerHeader />
+            <Main open={open} sx={{ minHeight: '100vh', justifyContent: 'center', }}  >
+                <Box m={{ xs: 1, sm: 2, md: 5 }}>
 
-                {props.children}
+                    <DrawerHeader />
+
+                    {props.children}
+                </Box>
             </Main>
         </Box >
     );
